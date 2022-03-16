@@ -4,7 +4,7 @@ const MONGOID: any = 'admin';
 const MONGOPASSWORD: any = '2dkdkanfek554kgsgnyyylakekjaa331245jdannde';
 
 const DBNAME = 'dahatnitest';
-const url = `mongodb://${MONGOID}:${MONGOPASSWORD}@13.125.75.185:27017`;
+const url = `mongodb://${MONGOID}:${MONGOPASSWORD}@3.36.124.15:27017`;
 // const url = `mongodb://${MONGOID}:${MONGOPASSWORD}@3.39.10.60:27017`;
 
 export const client = new MongoClient(url);
