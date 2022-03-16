@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StudentBadge = exports.RepeatData = exports.StudentProject = exports.StudentChecklist = void 0;
+exports.ClassBadge = exports.Badge = exports.StudentBadge = exports.RepeatData = exports.StudentProject = exports.StudentChecklist = void 0;
 //학생 체크리스트
 class StudentChecklist {
     constructor(classId, userId, code, checklistId) {
@@ -75,4 +75,38 @@ class StudentBadge {
     }
 }
 exports.StudentBadge = StudentBadge;
+//뱃지
+class Badge {
+    constructor(imgUrl = '', title = '', type = '', manualTarget = '', autoTarget = 0, desc = '') {
+        this.imgUrl = imgUrl;
+        this.title = title;
+        this.type = type;
+        this.manualTarget = manualTarget;
+        this.autoTarget = autoTarget;
+        this.desc = desc;
+        this.created = +new Date();
+        this.updated = +new Date();
+    }
+    static ManualInstance(imgUrl, title, manualTarget, desc = '') {
+        const newBadge = new Badge(imgUrl, title, 'manual', manualTarget, 0, desc);
+        return newBadge;
+    }
+    static AutoInstance(imgUrl, title, autoTarget = 0, desc = '') {
+        return new Badge(imgUrl, title, 'auto', '', autoTarget, desc);
+    }
+}
+exports.Badge = Badge;
+//학급 뱃지
+class ClassBadge {
+    constructor(classId, userId) {
+        this.classId = classId;
+        this.userId = userId;
+        const badgeList = new Array(6);
+        badgeList.fill(new Badge());
+        this.badges = badgeList;
+        this.created = +new Date();
+        this.updated = +new Date();
+    }
+}
+exports.ClassBadge = ClassBadge;
 //# sourceMappingURL=class.js.map

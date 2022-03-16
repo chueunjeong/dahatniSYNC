@@ -25,7 +25,7 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             timestamp: { $exists: true },
         });
         let updateStudentResult;
-        let index = 0;
+        let index = 1;
         function updateStudent(oldStudentList) {
             return __awaiter(this, void 0, void 0, function* () {
                 let updateStudentQueries = [];
@@ -110,6 +110,8 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                             $rename: { timestamp: 'created', lastUpdate: 'updated' },
                         },
                     });
+                    console.log('[', index, ']', studentCode);
+                    index++;
                 }
                 updateStudentResult = yield (0, mongoDB_1.bulkWrite1000BatchUpdateOne)('students', updateStudentQueries);
                 console.log('-----------------------------------------student update complete');
@@ -120,7 +122,7 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
         }
         yield updateStudent(oldStudentList);
-        console.log('----------------------student sync START------------------------');
+        console.log('----------------------student sync END------------------------');
         return res.json(updateStudentResult);
     }
     catch (e) {

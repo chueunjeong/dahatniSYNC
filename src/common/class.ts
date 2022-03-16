@@ -129,3 +129,58 @@ export class StudentBadge {
     this.updated = +new Date();
   }
 }
+
+//뱃지
+export class Badge {
+  imgUrl: string;
+  title: string;
+  type: string;
+  manualTarget: string;
+  autoTarget: number;
+  desc: string;
+  created: number;
+  updated: number;
+  constructor(
+    imgUrl: string = '',
+    title: string = '',
+    type: string = '',
+    manualTarget: string = '',
+    autoTarget: number = 0,
+    desc: string = '',
+  ) {
+    this.imgUrl = imgUrl;
+    this.title = title;
+    this.type = type;
+    this.manualTarget = manualTarget;
+    this.autoTarget = autoTarget;
+    this.desc = desc;
+    this.created = +new Date();
+    this.updated = +new Date();
+  }
+  static ManualInstance(imgUrl: string, title: string, manualTarget: string, desc: string = '') {
+    const newBadge: Badge = new Badge(imgUrl, title, 'manual', manualTarget, 0, desc);
+    return newBadge;
+  }
+  static AutoInstance(imgUrl: string, title: string, autoTarget: number = 0, desc: string = '') {
+    return new Badge(imgUrl, title, 'auto', '', autoTarget, desc);
+  }
+}
+
+//학급 뱃지
+export class ClassBadge {
+  classId: string;
+  userId: string;
+  badges: Badge[];
+  created: number;
+  updated: number;
+  constructor(classId: string, userId: string) {
+    this.classId = classId;
+    this.userId = userId;
+
+    const badgeList: Badge[] = new Array(6);
+    badgeList.fill(new Badge());
+    this.badges = badgeList;
+    this.created = +new Date();
+    this.updated = +new Date();
+  }
+}

@@ -13,7 +13,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
       timestamp: { $exists: true },
     });
     let updateStudentResult: any;
-    let index: number = 0;
+    let index: number = 1;
     async function updateStudent(oldStudentList: any[]) {
       let updateStudentQueries = [];
       let insertStudentBadgeQueries = [];
@@ -96,6 +96,9 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
             $rename: { timestamp: 'created', lastUpdate: 'updated' },
           },
         });
+
+        console.log('[', index, ']', studentCode);
+        index++;
       }
 
       updateStudentResult = await bulkWrite1000BatchUpdateOne('students', updateStudentQueries);
@@ -107,7 +110,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
     }
 
     await updateStudent(oldStudentList);
-    console.log('----------------------student sync START------------------------');
+    console.log('----------------------student sync END------------------------');
     return res.json(updateStudentResult);
   } catch (e) {
     console.log('[error]', e);
