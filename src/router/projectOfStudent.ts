@@ -79,7 +79,7 @@ router.put('/sync/count', async (req: express.Request, res: express.Response) =>
             },
           },
         });
-        console.log('[', index, ']', pos._id);
+        if (index % 100 === 0) console.log('[', index, ']', pos._id);
         index++;
       }
 

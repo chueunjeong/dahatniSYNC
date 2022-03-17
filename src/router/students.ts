@@ -1,4 +1,4 @@
-import { bulkWrite1000BatchInsert, bulkWrite1000BatchUpdateOne, findOne } from './../database/mongoDB';
+import { bulkWrite, bulkWrite1000BatchInsert, bulkWrite1000BatchUpdateOne, findOne } from './../database/mongoDB';
 import { ObjectId } from 'mongodb';
 import { StudentProject, StudentBadge } from './../common/class';
 import { decideNewProjectStatusColor } from './../common/statusDecision';
@@ -21,8 +21,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
       for (const student of oldStudentList) {
         const studentCode: string = student.code;
         let studentStatusInfo: string[] = new Array(2);
-        console.log('[', index, ']', studentCode);
-        index++;
+
         /*****************************status************************************** */
         const posListByStudentCode: any = await findByQuery('projectOfStudent', {
           code: studentCode,
@@ -82,29 +81,35 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
         const studentBadge: any = await findOne('badges_student', { code: studentCode });
 
         if (studentBadge == null) {
-          insertStudentBadgeQueries.push({ document: new StudentBadge(student.classId, student.userId, studentCode) });
+          insertStudentBadgeQueries.push({
+            insertOne: { document: new StudentBadge(student.classId, student.userId, studentCode) },
+          });
         }
 
         updateStudentQueries.push({
-          filter: { code: studentCode },
-          update: {
-            $set: {
-              status: studentStatusInfo[0],
-              iamdoneStatus: studentStatusInfo[1],
+          updateOne: {
+            filter: { code: studentCode },
+            update: {
+              $set: {
+                status: studentStatusInfo[0],
+                iamdoneStatus: studentStatusInfo[1],
+              },
+              $unset: { checked: '' },
+              $rename: { timestamp: 'created', lastUpdate: 'updated' },
             },
-            $unset: { checked: '' },
-            $rename: { timestamp: 'created', lastUpdate: 'updated' },
           },
         });
 
-        console.log('[', index, ']', studentCode);
+        if (index % 100 === 0) {
+          console.log('[', index, ']', studentCode);
+        }
         index++;
       }
 
-      updateStudentResult = await bulkWrite1000BatchUpdateOne('students', updateStudentQueries);
+      updateStudentResult = await bulkWrite('students', updateStudentQueries);
       console.log('-----------------------------------------student update complete');
       console.log(updateStudentResult);
-      const insertStudentBadgeListResult = await bulkWrite1000BatchInsert('badges_student', insertStudentBadgeQueries);
+      const insertStudentBadgeListResult = await bulkWrite('badges_student', insertStudentBadgeQueries);
       console.log('-----------------------------------------student badge insert complete');
       console.log(insertStudentBadgeListResult);
     }

@@ -78,7 +78,8 @@ router.put('/sync/count', (req, res) => __awaiter(void 0, void 0, void 0, functi
                             },
                         },
                     });
-                    console.log('[', index, ']', pos._id);
+                    if (index % 100 === 0)
+                        console.log('[', index, ']', pos._id);
                     index++;
                 }
                 updatePosResult = yield (0, mongoDB_1.bulkWrite)('projectOfStudent', updatePosQueries);

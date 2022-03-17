@@ -63,7 +63,8 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
                             },
                         },
                     });
-                    console.log('[', index, ']', projectId);
+                    if (index % 100 === 0)
+                        console.log('[', index, ']', projectId);
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('projects', updateProjectQueries);
@@ -123,7 +124,8 @@ router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, functi
                             },
                         },
                     });
-                    console.log('[', index, ']', projectId);
+                    if (index % 100 === 0)
+                        console.log('[', index, ']', projectId);
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('projects', updateProjectQueries);
@@ -184,7 +186,8 @@ router.put('/sync/count', (req, res) => __awaiter(void 0, void 0, void 0, functi
                             },
                         },
                     });
-                    console.log('[', index, ']', projectId);
+                    if (index % 100 === 0)
+                        console.log('[', index, ']', projectId);
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('projects', updateProjectQueries);
@@ -245,7 +248,8 @@ router.put('/sync/date', (req, res) => __awaiter(void 0, void 0, void 0, functio
                             },
                         },
                     });
-                    console.log('[', index, ']', projectId);
+                    if (index % 100 === 0)
+                        console.log('[', index, ']', projectId);
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('projects', updateProjectQueries);

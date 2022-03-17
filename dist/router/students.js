@@ -33,8 +33,6 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 for (const student of oldStudentList) {
                     const studentCode = student.code;
                     let studentStatusInfo = new Array(2);
-                    console.log('[', index, ']', studentCode);
-                    index++;
                     /*****************************status************************************** */
                     const posListByStudentCode = yield (0, mongoDB_2.findByQuery)('projectOfStudent', {
                         code: studentCode,
@@ -97,26 +95,32 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     /*****************************badge************************************** */
                     const studentBadge = yield (0, mongoDB_1.findOne)('badges_student', { code: studentCode });
                     if (studentBadge == null) {
-                        insertStudentBadgeQueries.push({ document: new class_1.StudentBadge(student.classId, student.userId, studentCode) });
+                        insertStudentBadgeQueries.push({
+                            insertOne: { document: new class_1.StudentBadge(student.classId, student.userId, studentCode) },
+                        });
                     }
                     updateStudentQueries.push({
-                        filter: { code: studentCode },
-                        update: {
-                            $set: {
-                                status: studentStatusInfo[0],
-                                iamdoneStatus: studentStatusInfo[1],
+                        updateOne: {
+                            filter: { code: studentCode },
+                            update: {
+                                $set: {
+                                    status: studentStatusInfo[0],
+                                    iamdoneStatus: studentStatusInfo[1],
+                                },
+                                $unset: { checked: '' },
+                                $rename: { timestamp: 'created', lastUpdate: 'updated' },
                             },
-                            $unset: { checked: '' },
-                            $rename: { timestamp: 'created', lastUpdate: 'updated' },
                         },
                     });
-                    console.log('[', index, ']', studentCode);
+                    if (index % 100 === 0) {
+                        console.log('[', index, ']', studentCode);
+                    }
                     index++;
                 }
-                updateStudentResult = yield (0, mongoDB_1.bulkWrite1000BatchUpdateOne)('students', updateStudentQueries);
+                updateStudentResult = yield (0, mongoDB_1.bulkWrite)('students', updateStudentQueries);
                 console.log('-----------------------------------------student update complete');
                 console.log(updateStudentResult);
-                const insertStudentBadgeListResult = yield (0, mongoDB_1.bulkWrite1000BatchInsert)('badges_student', insertStudentBadgeQueries);
+                const insertStudentBadgeListResult = yield (0, mongoDB_1.bulkWrite)('badges_student', insertStudentBadgeQueries);
                 console.log('-----------------------------------------student badge insert complete');
                 console.log(insertStudentBadgeListResult);
             });
