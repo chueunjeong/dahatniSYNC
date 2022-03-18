@@ -45,17 +45,20 @@ exports.bulkWrite = bulkWrite;
 const bulkWrite1000BatchUpdateOne = (_collection, _operations, _option) => new Promise((resolve, reject) => {
     let bulkOp = exports.client.db(DBNAME).collection(_collection).initializeOrderedBulkOp();
     let operationList = _operations;
+    let operationLength = operationList.length;
     let counter = 0;
+    let executeNum = 1;
     operationList.forEach(function (operation) {
         bulkOp.find(operation.filter).updateOne(operation.update);
         counter++;
-        console.log('???', counter);
-        if (counter % 500 == 0) {
+        if (counter % 1000 == 0) {
             bulkOp.execute();
+            console.log('[', executeNum, ']번째 EXCUTE');
+            executeNum++;
             bulkOp = exports.client.db(DBNAME).collection(_collection).initializeOrderedBulkOp();
         }
     });
-    if (counter % 500 != 0) {
+    if (counter % 1000 != 0) {
         bulkOp.execute();
     }
 });
@@ -64,16 +67,18 @@ const bulkWrite1000BatchInsert = (_collection, _operations, _option) => new Prom
     let bulkOp = exports.client.db(DBNAME).collection(_collection).initializeOrderedBulkOp();
     let operationList = _operations;
     let counter = 0;
+    let executeNum = 1;
     operationList.forEach(function (operation) {
         bulkOp.insert(operation);
         counter++;
-        console.log('!!!', counter);
-        if (counter % 500 == 0) {
+        if (counter % 1000 == 0) {
             bulkOp.execute();
+            console.log('[', executeNum, ']번째 EXCUTE');
+            executeNum++;
             bulkOp = exports.client.db(DBNAME).collection(_collection).initializeOrderedBulkOp();
         }
     });
-    if (counter % 500 != 0) {
+    if (counter % 1000 != 0) {
         bulkOp.execute();
     }
 });

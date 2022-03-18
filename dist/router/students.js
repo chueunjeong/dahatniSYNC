@@ -92,39 +92,34 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                             },
                         },
                     ]);
-                    console.log(cookiesNumByStudentCode);
                     const studentCookies = cookiesNumByStudentCode.length === 0 ? 0 : cookiesNumByStudentCode[0].cookiesNum;
                     /*****************************badge************************************** */
                     const studentBadge = yield (0, mongoDB_1.findOne)('badges_student', { code: studentCode });
                     if (studentBadge == null) {
-                        insertStudentBadgeQueries.push({
-                            insertOne: { document: new class_1.StudentBadge(student.classId, student.userId, studentCode) },
-                        });
+                        insertStudentBadgeQueries.push({ document: new class_1.StudentBadge(student.classId, student.userId, studentCode) });
                     }
                     updateStudentQueries.push({
-                        updateOne: {
-                            filter: { code: studentCode },
-                            update: {
-                                $set: {
-                                    status: studentStatusInfo[0],
-                                    iamdoneStatus: studentStatusInfo[1],
-                                    cookie: studentCookies,
-                                },
-                                $unset: { checked: '' },
-                                $rename: { timestamp: 'created', lastUpdate: 'updated' },
+                        filter: { code: studentCode },
+                        update: {
+                            $set: {
+                                status: studentStatusInfo[0],
+                                iamdoneStatus: studentStatusInfo[1],
+                                cookie: studentCookies,
                             },
+                            $unset: { checked: '' },
+                            $rename: { timestamp: 'created', lastUpdate: 'updated' },
                         },
                     });
                     if (index % 100 === 0) {
-                        console.log('[', index, '/', oldStudentNum.length, ']', studentCode);
+                        console.log('[', index, '/', oldStudentNum, ']', studentCode);
                     }
                     index++;
                 }
-                updateStudentResult = yield (0, mongoDB_1.bulkWrite)('students', updateStudentQueries);
+                updateStudentResult = yield (0, mongoDB_1.bulkWrite1000BatchUpdateOne)('students', updateStudentQueries);
                 console.log('-----------------------------------------student update complete');
                 console.log(updateStudentResult);
                 if (insertStudentBadgeQueries.length !== 0) {
-                    const insertStudentBadgeListResult = yield (0, mongoDB_1.bulkWrite)('badges_student', insertStudentBadgeQueries);
+                    const insertStudentBadgeListResult = yield (0, mongoDB_1.bulkWrite1000BatchInsert)('badges_student', insertStudentBadgeQueries);
                     console.log('-----------------------------------------student badge insert complete');
                     console.log(insertStudentBadgeListResult);
                 }

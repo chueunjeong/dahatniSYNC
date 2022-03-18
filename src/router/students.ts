@@ -76,43 +76,42 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
             },
           },
         ]);
-        console.log(cookiesNumByStudentCode);
+
         const studentCookies: number = cookiesNumByStudentCode.length === 0 ? 0 : cookiesNumByStudentCode[0].cookiesNum;
         /*****************************badge************************************** */
         const studentBadge: any = await findOne('badges_student', { code: studentCode });
 
         if (studentBadge == null) {
-          insertStudentBadgeQueries.push({
-            insertOne: { document: new StudentBadge(student.classId, student.userId, studentCode) },
-          });
+          insertStudentBadgeQueries.push({ document: new StudentBadge(student.classId, student.userId, studentCode) });
         }
 
         updateStudentQueries.push({
-          updateOne: {
-            filter: { code: studentCode },
-            update: {
-              $set: {
-                status: studentStatusInfo[0],
-                iamdoneStatus: studentStatusInfo[1],
-                cookie: studentCookies,
-              },
-              $unset: { checked: '' },
-              $rename: { timestamp: 'created', lastUpdate: 'updated' },
+          filter: { code: studentCode },
+          update: {
+            $set: {
+              status: studentStatusInfo[0],
+              iamdoneStatus: studentStatusInfo[1],
+              cookie: studentCookies,
             },
+            $unset: { checked: '' },
+            $rename: { timestamp: 'created', lastUpdate: 'updated' },
           },
         });
 
         if (index % 100 === 0) {
-          console.log('[', index, '/', oldStudentNum.length, ']', studentCode);
+          console.log('[', index, '/', oldStudentNum, ']', studentCode);
         }
         index++;
       }
 
-      updateStudentResult = await bulkWrite('students', updateStudentQueries);
+      updateStudentResult = await bulkWrite1000BatchUpdateOne('students', updateStudentQueries);
       console.log('-----------------------------------------student update complete');
       console.log(updateStudentResult);
       if (insertStudentBadgeQueries.length !== 0) {
-        const insertStudentBadgeListResult = await bulkWrite('badges_student', insertStudentBadgeQueries);
+        const insertStudentBadgeListResult = await bulkWrite1000BatchInsert(
+          'badges_student',
+          insertStudentBadgeQueries,
+        );
         console.log('-----------------------------------------student badge insert complete');
         console.log(insertStudentBadgeListResult);
       }
