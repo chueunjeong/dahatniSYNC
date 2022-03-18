@@ -36,7 +36,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
             },
           },
         });
-        console.log('[', index, ']', checklistId);
+        console.log('[', index, '/', oldChecklist.length, ']', checklistId);
         index++;
       }
 

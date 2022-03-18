@@ -51,7 +51,7 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                         },
                     });
                     if (index % 100 === 0)
-                        console.log('[', index, ']', noticeId);
+                        console.log('[', index, '/', oldNotList.length, ']', noticeId);
                     index++;
                 }
                 updateNotResult = yield (0, mongoDB_1.bulkWrite)('noticeOfTeachers', updateNotQueries);

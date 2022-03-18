@@ -79,7 +79,7 @@ router.put('/sync/count', async (req: express.Request, res: express.Response) =>
             },
           },
         });
-        if (index % 100 === 0) console.log('[', index, ']', pos._id);
+        if (index % 100 === 0) console.log('[', index, '/', allCountPos.length, ']', pos._id);
         index++;
       }
 
@@ -98,14 +98,14 @@ router.put('/sync/date', async (req: express.Request, res: express.Response) => 
   try {
     console.log('----------------------pos sync START------------------------');
     let index = 1;
-    const allCountPos: any = await findByQuery('projectOfStudent', {
+    const allDatePos: any = await findByQuery('projectOfStudent', {
       repeat: true,
       repeatType: 'date',
     });
     let updatePosResult: any;
-    async function updateDatePos(allCountPos: any[]) {
+    async function updateDatePos(allDatePos: any[]) {
       let updatePosQueries = [];
-      for (const pos of allCountPos) {
+      for (const pos of allDatePos) {
         let oldRepeatData: any[] = pos.repeatData;
         let newRepeatData: RepeatData[] = new Array(oldRepeatData.length);
 
@@ -123,13 +123,13 @@ router.put('/sync/date', async (req: express.Request, res: express.Response) => 
             },
           },
         });
-        console.log('[', index, ']', pos._id);
+        console.log('[', index, '/', allDatePos.length, ']', pos._id);
         index++;
       }
 
       updatePosResult = await bulkWrite('projectOfStudent', updatePosQueries);
     }
-    await updateDatePos(allCountPos);
+    await updateDatePos(allDatePos);
     console.log('----------------------pos sync END------------------------');
     return res.json(updatePosResult);
   } catch (e) {

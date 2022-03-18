@@ -12,7 +12,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
     const oldClassList: any = await findByQuery('class', {
       _id: new ObjectId('60ee6bd985291054d37fce0d'),
     });
-
+    const allClassCase: number = oldClassList.length;
     let updateProjectResult: any;
     async function updateClass(oldClassList: any[]) {
       let updateClassQueries = [];
@@ -20,7 +20,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
       for (const classInfo of oldClassList) {
         const classId: string = classInfo._id.toString();
         const userId: string = classInfo.userId;
-
+        let classCookies: number = 0;
         /*****************************status************************************** */
         const studentListByClassId: any = await findByQuery('students', {
           classId: classId,
@@ -28,10 +28,9 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
 
         const newClassStatus: string = decideNewClassStatusColor(studentListByClassId);
         /*****************************cookie************************************** */
-        let classCookies: number =
-          studentListByClassId.length === 0
-            ? 0
-            : studentListByClassId.map((student: any) => (classCookies += student.cookie));
+        if (studentListByClassId.length !== 0) {
+          studentListByClassId.map((student: any) => (classCookies += student.cookie));
+        }
         /*****************************badge************************************** */
         const badge: any = await findOne('badges_teacher', { classId: classId });
 
@@ -56,7 +55,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
           },
         });
 
-        if (index % 100 == 0) console.log('[', index, ']', classId);
+        if (index % 100 == 0) console.log('[', index, '/', allClassCase, ']', ']', classId);
         index++;
       }
 
@@ -82,7 +81,7 @@ router.put('/sync/true', async (req: express.Request, res: express.Response) => 
     const oldClassList: any = await findByQuery('class', {
       cookieHidden: 'true',
     });
-
+    const allClassCase: number = oldClassList.length;
     let updateProjectResult: any;
     async function updateClass(oldClassList: any[]) {
       let updateClassQueries = [];
@@ -90,7 +89,7 @@ router.put('/sync/true', async (req: express.Request, res: express.Response) => 
       for (const classInfo of oldClassList) {
         const classId: string = classInfo._id.toString();
         const userId: string = classInfo.userId;
-
+        let classCookies: number = 0;
         /*****************************status************************************** */
         const studentListByClassId: any = await findByQuery('students', {
           classId: classId,
@@ -98,10 +97,9 @@ router.put('/sync/true', async (req: express.Request, res: express.Response) => 
 
         const newClassStatus: string = decideNewClassStatusColor(studentListByClassId);
         /*****************************cookie************************************** */
-        let classCookies: number =
-          studentListByClassId.length === 0
-            ? 0
-            : studentListByClassId.map((student: any) => (classCookies += student.cookie));
+        if (studentListByClassId.length !== 0) {
+          studentListByClassId.map((student: any) => (classCookies += student.cookie));
+        }
         /*****************************badge************************************** */
         const badge: any = await findOne('badges_teacher', { classId: classId });
 
@@ -124,7 +122,7 @@ router.put('/sync/true', async (req: express.Request, res: express.Response) => 
           },
         });
 
-        if (index % 100 == 0) console.log('[', index, ']', classId);
+        if (index % 100 == 0) console.log('[', index, '/', allClassCase, ']', ']', classId);
         index++;
       }
 
@@ -148,7 +146,7 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
     const oldClassList: any = await findByQuery('class', {
       cookieHidden: 'false',
     });
-
+    const allClassCase: number = oldClassList.length;
     let updateProjectResult: any;
     async function updateClass(oldClassList: any[]) {
       let updateClassQueries = [];
@@ -156,7 +154,7 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
       for (const classInfo of oldClassList) {
         const classId: string = classInfo._id.toString();
         const userId: string = classInfo.userId;
-
+        let classCookies: number = 0;
         /*****************************status************************************** */
         const studentListByClassId: any = await findByQuery('students', {
           classId: classId,
@@ -164,10 +162,9 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
 
         const newClassStatus: string = decideNewClassStatusColor(studentListByClassId);
         /*****************************cookie************************************** */
-        let classCookies: number =
-          studentListByClassId.length === 0
-            ? 0
-            : studentListByClassId.map((student: any) => (classCookies += student.cookie));
+        if (studentListByClassId.length !== 0) {
+          studentListByClassId.map((student: any) => (classCookies += student.cookie));
+        }
         /*****************************badge************************************** */
         const badge: any = await findOne('badges_teacher', { classId: classId });
 
@@ -190,7 +187,7 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
           },
         });
 
-        if (index % 100 == 0) console.log('[', index, ']', classId);
+        if (index % 100 == 0) console.log('[', index, '/', allClassCase, ']', ']', classId);
         index++;
       }
 

@@ -79,7 +79,7 @@ router.put('/sync/count', (req, res) => __awaiter(void 0, void 0, void 0, functi
                         },
                     });
                     if (index % 100 === 0)
-                        console.log('[', index, ']', pos._id);
+                        console.log('[', index, '/', allCountPos.length, ']', pos._id);
                     index++;
                 }
                 updatePosResult = yield (0, mongoDB_1.bulkWrite)('projectOfStudent', updatePosQueries);
@@ -98,15 +98,15 @@ router.put('/sync/date', (req, res) => __awaiter(void 0, void 0, void 0, functio
     try {
         console.log('----------------------pos sync START------------------------');
         let index = 1;
-        const allCountPos = yield (0, mongoDB_1.findByQuery)('projectOfStudent', {
+        const allDatePos = yield (0, mongoDB_1.findByQuery)('projectOfStudent', {
             repeat: true,
             repeatType: 'date',
         });
         let updatePosResult;
-        function updateDatePos(allCountPos) {
+        function updateDatePos(allDatePos) {
             return __awaiter(this, void 0, void 0, function* () {
                 let updatePosQueries = [];
-                for (const pos of allCountPos) {
+                for (const pos of allDatePos) {
                     let oldRepeatData = pos.repeatData;
                     let newRepeatData = new Array(oldRepeatData.length);
                     oldRepeatData.map((oldData, index) => (newRepeatData[index] =
@@ -120,13 +120,13 @@ router.put('/sync/date', (req, res) => __awaiter(void 0, void 0, void 0, functio
                             },
                         },
                     });
-                    console.log('[', index, ']', pos._id);
+                    console.log('[', index, '/', allDatePos.length, ']', pos._id);
                     index++;
                 }
                 updatePosResult = yield (0, mongoDB_1.bulkWrite)('projectOfStudent', updatePosQueries);
             });
         }
-        yield updateDatePos(allCountPos);
+        yield updateDatePos(allDatePos);
         console.log('----------------------pos sync END------------------------');
         return res.json(updatePosResult);
     }

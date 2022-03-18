@@ -25,6 +25,7 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
         const oldClassList = yield (0, mongoDB_1.findByQuery)('class', {
             _id: new mongodb_1.ObjectId('60ee6bd985291054d37fce0d'),
         });
+        const allClassCase = oldClassList.length;
         let updateProjectResult;
         function updateClass(oldClassList) {
             return __awaiter(this, void 0, void 0, function* () {
@@ -33,15 +34,16 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
                 for (const classInfo of oldClassList) {
                     const classId = classInfo._id.toString();
                     const userId = classInfo.userId;
+                    let classCookies = 0;
                     /*****************************status************************************** */
                     const studentListByClassId = yield (0, mongoDB_1.findByQuery)('students', {
                         classId: classId,
                     });
                     const newClassStatus = (0, statusDecision_1.decideNewClassStatusColor)(studentListByClassId);
                     /*****************************cookie************************************** */
-                    let classCookies = studentListByClassId.length === 0
-                        ? 0
-                        : studentListByClassId.map((student) => (classCookies += student.cookie));
+                    if (studentListByClassId.length !== 0) {
+                        studentListByClassId.map((student) => (classCookies += student.cookie));
+                    }
                     /*****************************badge************************************** */
                     const badge = yield (0, mongoDB_1.findOne)('badges_teacher', { classId: classId });
                     if (badge == null) {
@@ -64,7 +66,7 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
                         },
                     });
                     if (index % 100 == 0)
-                        console.log('[', index, ']', classId);
+                        console.log('[', index, '/', allClassCase, ']', ']', classId);
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('class', updateClassQueries);
@@ -89,6 +91,7 @@ router.put('/sync/true', (req, res) => __awaiter(void 0, void 0, void 0, functio
         const oldClassList = yield (0, mongoDB_1.findByQuery)('class', {
             cookieHidden: 'true',
         });
+        const allClassCase = oldClassList.length;
         let updateProjectResult;
         function updateClass(oldClassList) {
             return __awaiter(this, void 0, void 0, function* () {
@@ -97,15 +100,16 @@ router.put('/sync/true', (req, res) => __awaiter(void 0, void 0, void 0, functio
                 for (const classInfo of oldClassList) {
                     const classId = classInfo._id.toString();
                     const userId = classInfo.userId;
+                    let classCookies = 0;
                     /*****************************status************************************** */
                     const studentListByClassId = yield (0, mongoDB_1.findByQuery)('students', {
                         classId: classId,
                     });
                     const newClassStatus = (0, statusDecision_1.decideNewClassStatusColor)(studentListByClassId);
                     /*****************************cookie************************************** */
-                    let classCookies = studentListByClassId.length === 0
-                        ? 0
-                        : studentListByClassId.map((student) => (classCookies += student.cookie));
+                    if (studentListByClassId.length !== 0) {
+                        studentListByClassId.map((student) => (classCookies += student.cookie));
+                    }
                     /*****************************badge************************************** */
                     const badge = yield (0, mongoDB_1.findOne)('badges_teacher', { classId: classId });
                     if (badge == null) {
@@ -126,7 +130,7 @@ router.put('/sync/true', (req, res) => __awaiter(void 0, void 0, void 0, functio
                         },
                     });
                     if (index % 100 == 0)
-                        console.log('[', index, ']', classId);
+                        console.log('[', index, '/', allClassCase, ']', ']', classId);
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('class', updateClassQueries);
@@ -149,6 +153,7 @@ router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, functi
         const oldClassList = yield (0, mongoDB_1.findByQuery)('class', {
             cookieHidden: 'false',
         });
+        const allClassCase = oldClassList.length;
         let updateProjectResult;
         function updateClass(oldClassList) {
             return __awaiter(this, void 0, void 0, function* () {
@@ -157,15 +162,16 @@ router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, functi
                 for (const classInfo of oldClassList) {
                     const classId = classInfo._id.toString();
                     const userId = classInfo.userId;
+                    let classCookies = 0;
                     /*****************************status************************************** */
                     const studentListByClassId = yield (0, mongoDB_1.findByQuery)('students', {
                         classId: classId,
                     });
                     const newClassStatus = (0, statusDecision_1.decideNewClassStatusColor)(studentListByClassId);
                     /*****************************cookie************************************** */
-                    let classCookies = studentListByClassId.length === 0
-                        ? 0
-                        : studentListByClassId.map((student) => (classCookies += student.cookie));
+                    if (studentListByClassId.length !== 0) {
+                        studentListByClassId.map((student) => (classCookies += student.cookie));
+                    }
                     /*****************************badge************************************** */
                     const badge = yield (0, mongoDB_1.findOne)('badges_teacher', { classId: classId });
                     if (badge == null) {
@@ -186,7 +192,7 @@ router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, functi
                         },
                     });
                     if (index % 100 == 0)
-                        console.log('[', index, ']', classId);
+                        console.log('[', index, '/', allClassCase, ']', ']', classId);
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('class', updateClassQueries);

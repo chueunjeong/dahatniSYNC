@@ -37,7 +37,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
           },
         });
 
-        if (index % 100 === 0) console.log('[', index, ']', noticeId);
+        if (index % 100 === 0) console.log('[', index, '/', oldNotList.length, ']', noticeId);
         index++;
       }
 

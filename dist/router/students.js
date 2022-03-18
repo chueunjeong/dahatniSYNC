@@ -24,6 +24,7 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const oldStudentList = yield (0, mongoDB_2.findByQuery)('students', {
             timestamp: { $exists: true },
         });
+        const oldStudentNum = oldStudentList.length;
         let updateStudentResult;
         let index = 1;
         function updateStudent(oldStudentList) {
@@ -115,7 +116,7 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                         },
                     });
                     if (index % 100 === 0) {
-                        console.log('[', index, ']', studentCode);
+                        console.log('[', index, '/', oldStudentNum.length, ']', studentCode);
                     }
                     index++;
                 }

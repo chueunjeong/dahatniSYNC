@@ -50,7 +50,7 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                             },
                         },
                     });
-                    console.log('[', index, ']', checklistId);
+                    console.log('[', index, '/', oldChecklist.length, ']', checklistId);
                     index++;
                 }
                 updateChecklistResult = yield (0, mongoDB_1.bulkWrite)('checklist', updateChecklistQueries);

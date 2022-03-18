@@ -12,6 +12,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
     const oldStudentList: any = await findByQuery('students', {
       timestamp: { $exists: true },
     });
+    const oldStudentNum = oldStudentList.length;
     let updateStudentResult: any;
     let index: number = 1;
     async function updateStudent(oldStudentList: any[]) {
@@ -102,7 +103,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
         });
 
         if (index % 100 === 0) {
-          console.log('[', index, ']', studentCode);
+          console.log('[', index, '/', oldStudentNum.length, ']', studentCode);
         }
         index++;
       }

@@ -53,7 +53,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
             },
           },
         });
-        if (index % 100 === 0) console.log('[', index, ']', projectId);
+        if (index % 100 === 0) console.log('[', index, '/', oldProjectList.length, ']', projectId);
         index++;
       }
 
@@ -114,7 +114,7 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
           },
         });
 
-        if (index % 100 === 0) console.log('[', index, ']', projectId);
+        if (index % 100 === 0) console.log('[', index, '/', oldProjectList.length, ']', projectId);
         index++;
       }
 
@@ -180,7 +180,7 @@ router.put('/sync/count', async (req: express.Request, res: express.Response) =>
           },
         });
 
-        if (index % 100 === 0) console.log('[', index, ']', projectId);
+        if (index % 100 === 0) console.log('[', index, '/', oldProjectList.length, ']', projectId);
         index++;
       }
 
@@ -244,7 +244,7 @@ router.put('/sync/date', async (req: express.Request, res: express.Response) => 
           },
         });
 
-        if (index % 100 === 0) console.log('[', index, ']', projectId);
+        if (index % 100 === 0) console.log('[', index, '/', oldProjectList.length, ']', projectId);
         index++;
       }
 

@@ -64,7 +64,7 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
                         },
                     });
                     if (index % 100 === 0)
-                        console.log('[', index, ']', projectId);
+                        console.log('[', index, '/', oldProjectList.length, ']', projectId);
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('projects', updateProjectQueries);
@@ -125,7 +125,7 @@ router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, functi
                         },
                     });
                     if (index % 100 === 0)
-                        console.log('[', index, ']', projectId);
+                        console.log('[', index, '/', oldProjectList.length, ']', projectId);
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('projects', updateProjectQueries);
@@ -187,7 +187,7 @@ router.put('/sync/count', (req, res) => __awaiter(void 0, void 0, void 0, functi
                         },
                     });
                     if (index % 100 === 0)
-                        console.log('[', index, ']', projectId);
+                        console.log('[', index, '/', oldProjectList.length, ']', projectId);
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('projects', updateProjectQueries);
@@ -249,7 +249,7 @@ router.put('/sync/date', (req, res) => __awaiter(void 0, void 0, void 0, functio
                         },
                     });
                     if (index % 100 === 0)
-                        console.log('[', index, ']', projectId);
+                        console.log('[', index, '/', oldProjectList.length, ']', projectId);
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('projects', updateProjectQueries);
