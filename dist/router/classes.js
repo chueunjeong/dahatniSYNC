@@ -23,7 +23,7 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
         console.log('----------------------class sync START------------------------');
         let index = 1;
         const oldClassList = yield (0, mongoDB_1.findByQuery)('class', {
-            cookieHidden: { $exists: false },
+            _id: new mongodb_1.ObjectId('60ee6bd985291054d37fce0d'),
         });
         let updateProjectResult;
         function updateClass(oldClassList) {
@@ -34,10 +34,14 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
                     const classId = classInfo._id.toString();
                     const userId = classInfo.userId;
                     /*****************************status************************************** */
-                    const studentListByClassId = yield (0, mongoDB_1.findByQuery)('projectOfStudent', {
+                    const studentListByClassId = yield (0, mongoDB_1.findByQuery)('students', {
                         classId: classId,
                     });
                     const newClassStatus = (0, statusDecision_1.decideNewClassStatusColor)(studentListByClassId);
+                    /*****************************cookie************************************** */
+                    let classCookies = studentListByClassId.length === 0
+                        ? 0
+                        : studentListByClassId.map((student) => (classCookies += student.cookie));
                     /*****************************badge************************************** */
                     const badge = yield (0, mongoDB_1.findOne)('badges_teacher', { classId: classId });
                     if (badge == null) {
@@ -52,6 +56,7 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
                                     cookieHidden: true,
                                     targetAction: '',
                                     targetCookies: '',
+                                    cookies: classCookies,
                                 },
                                 $unset: { sort: '' },
                                 $rename: { timestamp: 'created', lastUpdate: 'updated' },
@@ -63,7 +68,9 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
                     index++;
                 }
                 updateProjectResult = yield (0, mongoDB_1.bulkWrite)('class', updateClassQueries);
-                const insertBadgeListResult = yield (0, mongoDB_1.bulkWrite)('badges_teacher', insertBadgeQueries);
+                if (insertBadgeQueries.length !== 0) {
+                    const insertBadgeListResult = yield (0, mongoDB_1.bulkWrite)('badges_teacher', insertBadgeQueries);
+                }
             });
         }
         yield updateClass(oldClassList);
@@ -91,10 +98,14 @@ router.put('/sync/true', (req, res) => __awaiter(void 0, void 0, void 0, functio
                     const classId = classInfo._id.toString();
                     const userId = classInfo.userId;
                     /*****************************status************************************** */
-                    const studentListByClassId = yield (0, mongoDB_1.findByQuery)('projectOfStudent', {
+                    const studentListByClassId = yield (0, mongoDB_1.findByQuery)('students', {
                         classId: classId,
                     });
                     const newClassStatus = (0, statusDecision_1.decideNewClassStatusColor)(studentListByClassId);
+                    /*****************************cookie************************************** */
+                    let classCookies = studentListByClassId.length === 0
+                        ? 0
+                        : studentListByClassId.map((student) => (classCookies += student.cookie));
                     /*****************************badge************************************** */
                     const badge = yield (0, mongoDB_1.findOne)('badges_teacher', { classId: classId });
                     if (badge == null) {
@@ -107,6 +118,7 @@ router.put('/sync/true', (req, res) => __awaiter(void 0, void 0, void 0, functio
                                 $set: {
                                     status: newClassStatus,
                                     cookieHidden: true,
+                                    cookies: classCookies,
                                 },
                                 $unset: { sort: '' },
                                 $rename: { timestamp: 'created', lastUpdate: 'updated' },
@@ -146,10 +158,14 @@ router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, functi
                     const classId = classInfo._id.toString();
                     const userId = classInfo.userId;
                     /*****************************status************************************** */
-                    const studentListByClassId = yield (0, mongoDB_1.findByQuery)('projectOfStudent', {
+                    const studentListByClassId = yield (0, mongoDB_1.findByQuery)('students', {
                         classId: classId,
                     });
                     const newClassStatus = (0, statusDecision_1.decideNewClassStatusColor)(studentListByClassId);
+                    /*****************************cookie************************************** */
+                    let classCookies = studentListByClassId.length === 0
+                        ? 0
+                        : studentListByClassId.map((student) => (classCookies += student.cookie));
                     /*****************************badge************************************** */
                     const badge = yield (0, mongoDB_1.findOne)('badges_teacher', { classId: classId });
                     if (badge == null) {
@@ -162,6 +178,7 @@ router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, functi
                                 $set: {
                                     status: newClassStatus,
                                     cookieHidden: false,
+                                    cookies: classCookies,
                                 },
                                 $unset: { sort: '' },
                                 $rename: { timestamp: 'created', lastUpdate: 'updated' },

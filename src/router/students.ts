@@ -75,7 +75,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
             },
           },
         ]);
-
+        console.log(cookiesNumByStudentCode);
         const studentCookies: number = cookiesNumByStudentCode.length === 0 ? 0 : cookiesNumByStudentCode[0].cookiesNum;
         /*****************************badge************************************** */
         const studentBadge: any = await findOne('badges_student', { code: studentCode });
@@ -93,6 +93,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
               $set: {
                 status: studentStatusInfo[0],
                 iamdoneStatus: studentStatusInfo[1],
+                cookie: studentCookies,
               },
               $unset: { checked: '' },
               $rename: { timestamp: 'created', lastUpdate: 'updated' },
@@ -109,9 +110,11 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
       updateStudentResult = await bulkWrite('students', updateStudentQueries);
       console.log('-----------------------------------------student update complete');
       console.log(updateStudentResult);
-      const insertStudentBadgeListResult = await bulkWrite('badges_student', insertStudentBadgeQueries);
-      console.log('-----------------------------------------student badge insert complete');
-      console.log(insertStudentBadgeListResult);
+      if (insertStudentBadgeQueries.length !== 0) {
+        const insertStudentBadgeListResult = await bulkWrite('badges_student', insertStudentBadgeQueries);
+        console.log('-----------------------------------------student badge insert complete');
+        console.log(insertStudentBadgeListResult);
+      }
     }
 
     await updateStudent(oldStudentList);

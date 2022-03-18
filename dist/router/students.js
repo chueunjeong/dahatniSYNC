@@ -91,6 +91,7 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                             },
                         },
                     ]);
+                    console.log(cookiesNumByStudentCode);
                     const studentCookies = cookiesNumByStudentCode.length === 0 ? 0 : cookiesNumByStudentCode[0].cookiesNum;
                     /*****************************badge************************************** */
                     const studentBadge = yield (0, mongoDB_1.findOne)('badges_student', { code: studentCode });
@@ -106,6 +107,7 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                                 $set: {
                                     status: studentStatusInfo[0],
                                     iamdoneStatus: studentStatusInfo[1],
+                                    cookie: studentCookies,
                                 },
                                 $unset: { checked: '' },
                                 $rename: { timestamp: 'created', lastUpdate: 'updated' },
@@ -120,9 +122,11 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 updateStudentResult = yield (0, mongoDB_1.bulkWrite)('students', updateStudentQueries);
                 console.log('-----------------------------------------student update complete');
                 console.log(updateStudentResult);
-                const insertStudentBadgeListResult = yield (0, mongoDB_1.bulkWrite)('badges_student', insertStudentBadgeQueries);
-                console.log('-----------------------------------------student badge insert complete');
-                console.log(insertStudentBadgeListResult);
+                if (insertStudentBadgeQueries.length !== 0) {
+                    const insertStudentBadgeListResult = yield (0, mongoDB_1.bulkWrite)('badges_student', insertStudentBadgeQueries);
+                    console.log('-----------------------------------------student badge insert complete');
+                    console.log(insertStudentBadgeListResult);
+                }
             });
         }
         yield updateStudent(oldStudentList);

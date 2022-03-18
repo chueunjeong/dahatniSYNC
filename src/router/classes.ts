@@ -10,7 +10,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
     console.log('----------------------class sync START------------------------');
     let index = 1;
     const oldClassList: any = await findByQuery('class', {
-      cookieHidden: { $exists: false },
+      _id: new ObjectId('60ee6bd985291054d37fce0d'),
     });
 
     let updateProjectResult: any;
@@ -22,12 +22,16 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
         const userId: string = classInfo.userId;
 
         /*****************************status************************************** */
-        const studentListByClassId: any = await findByQuery('projectOfStudent', {
+        const studentListByClassId: any = await findByQuery('students', {
           classId: classId,
         });
 
         const newClassStatus: string = decideNewClassStatusColor(studentListByClassId);
-
+        /*****************************cookie************************************** */
+        let classCookies: number =
+          studentListByClassId.length === 0
+            ? 0
+            : studentListByClassId.map((student: any) => (classCookies += student.cookie));
         /*****************************badge************************************** */
         const badge: any = await findOne('badges_teacher', { classId: classId });
 
@@ -44,6 +48,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
                 cookieHidden: true,
                 targetAction: '',
                 targetCookies: '',
+                cookies: classCookies,
               },
               $unset: { sort: '' },
               $rename: { timestamp: 'created', lastUpdate: 'updated' },
@@ -56,7 +61,9 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
       }
 
       updateProjectResult = await bulkWrite('class', updateClassQueries);
-      const insertBadgeListResult = await bulkWrite('badges_teacher', insertBadgeQueries);
+      if (insertBadgeQueries.length !== 0) {
+        const insertBadgeListResult = await bulkWrite('badges_teacher', insertBadgeQueries);
+      }
     }
     await updateClass(oldClassList);
 
@@ -85,12 +92,16 @@ router.put('/sync/true', async (req: express.Request, res: express.Response) => 
         const userId: string = classInfo.userId;
 
         /*****************************status************************************** */
-        const studentListByClassId: any = await findByQuery('projectOfStudent', {
+        const studentListByClassId: any = await findByQuery('students', {
           classId: classId,
         });
 
         const newClassStatus: string = decideNewClassStatusColor(studentListByClassId);
-
+        /*****************************cookie************************************** */
+        let classCookies: number =
+          studentListByClassId.length === 0
+            ? 0
+            : studentListByClassId.map((student: any) => (classCookies += student.cookie));
         /*****************************badge************************************** */
         const badge: any = await findOne('badges_teacher', { classId: classId });
 
@@ -105,6 +116,7 @@ router.put('/sync/true', async (req: express.Request, res: express.Response) => 
               $set: {
                 status: newClassStatus,
                 cookieHidden: true,
+                cookies: classCookies,
               },
               $unset: { sort: '' },
               $rename: { timestamp: 'created', lastUpdate: 'updated' },
@@ -146,12 +158,16 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
         const userId: string = classInfo.userId;
 
         /*****************************status************************************** */
-        const studentListByClassId: any = await findByQuery('projectOfStudent', {
+        const studentListByClassId: any = await findByQuery('students', {
           classId: classId,
         });
 
         const newClassStatus: string = decideNewClassStatusColor(studentListByClassId);
-
+        /*****************************cookie************************************** */
+        let classCookies: number =
+          studentListByClassId.length === 0
+            ? 0
+            : studentListByClassId.map((student: any) => (classCookies += student.cookie));
         /*****************************badge************************************** */
         const badge: any = await findOne('badges_teacher', { classId: classId });
 
@@ -166,6 +182,7 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
               $set: {
                 status: newClassStatus,
                 cookieHidden: false,
+                cookies: classCookies,
               },
               $unset: { sort: '' },
               $rename: { timestamp: 'created', lastUpdate: 'updated' },
