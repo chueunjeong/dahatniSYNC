@@ -63,10 +63,7 @@ export const bulkWrite1000BatchUpdateOne = (_collection: string, _operations: an
         bulkOp = client.db(DBNAME).collection(_collection).initializeOrderedBulkOp();
       }
     });
-
-    if (counter % 1000 != 0) {
-      bulkOp.execute();
-    }
+    bulkOp.execute();
   });
 
 export const bulkWrite1000BatchInsert = (_collection: string, _operations: any[], _option?: object) =>
@@ -85,10 +82,8 @@ export const bulkWrite1000BatchInsert = (_collection: string, _operations: any[]
         bulkOp = client.db(DBNAME).collection(_collection).initializeOrderedBulkOp();
       }
     });
-
-    if (counter % 1000 != 0) {
-      bulkOp.execute();
-    }
+    console.log(counter);
+    bulkOp.execute();
   });
 
 export const findOne = (_collection: string, _find: object, _option?: object) =>

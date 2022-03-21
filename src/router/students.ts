@@ -1,4 +1,10 @@
-import { bulkWrite, bulkWrite1000BatchInsert, bulkWrite1000BatchUpdateOne, findOne } from './../database/mongoDB';
+import {
+  bulkWrite,
+  bulkWrite1000BatchInsert,
+  bulkWrite1000BatchUpdateOne,
+  findOne,
+  insertOne,
+} from './../database/mongoDB';
 import { ObjectId } from 'mongodb';
 import { StudentProject, StudentBadge } from './../common/class';
 import { decideNewProjectStatusColor } from './../common/statusDecision';
@@ -11,6 +17,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
     console.log('----------------------student sync START------------------------');
     const oldStudentList: any = await findByQuery('students', {
       timestamp: { $exists: true },
+      //code: 'w6LWgR8JW',
     });
     const oldStudentNum = oldStudentList.length;
     let updateStudentResult: any;
@@ -82,19 +89,23 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
         const studentBadge: any = await findOne('badges_student', { code: studentCode });
 
         if (studentBadge == null) {
-          insertStudentBadgeQueries.push({ document: new StudentBadge(student.classId, student.userId, studentCode) });
+          insertStudentBadgeQueries.push({
+            insertOne: { document: new StudentBadge(student.classId, student.userId, studentCode) },
+          });
         }
 
         updateStudentQueries.push({
-          filter: { code: studentCode },
-          update: {
-            $set: {
-              status: studentStatusInfo[0],
-              iamdoneStatus: studentStatusInfo[1],
-              cookie: studentCookies,
+          updateOne: {
+            filter: { code: studentCode },
+            update: {
+              $set: {
+                status: studentStatusInfo[0],
+                iamdoneStatus: studentStatusInfo[1],
+                cookie: studentCookies,
+              },
+              $unset: { checked: '' },
+              $rename: { timestamp: 'created', lastUpdate: 'updated' },
             },
-            $unset: { checked: '' },
-            $rename: { timestamp: 'created', lastUpdate: 'updated' },
           },
         });
 
@@ -104,14 +115,11 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
         index++;
       }
 
-      updateStudentResult = await bulkWrite1000BatchUpdateOne('students', updateStudentQueries);
+      updateStudentResult = await bulkWrite('students', updateStudentQueries);
       console.log('-----------------------------------------student update complete');
       console.log(updateStudentResult);
       if (insertStudentBadgeQueries.length !== 0) {
-        const insertStudentBadgeListResult = await bulkWrite1000BatchInsert(
-          'badges_student',
-          insertStudentBadgeQueries,
-        );
+        const insertStudentBadgeListResult = await bulkWrite('badges_student', insertStudentBadgeQueries);
         console.log('-----------------------------------------student badge insert complete');
         console.log(insertStudentBadgeListResult);
       }

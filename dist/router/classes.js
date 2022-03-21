@@ -23,7 +23,7 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
         console.log('----------------------class sync START------------------------');
         let index = 1;
         const oldClassList = yield (0, mongoDB_1.findByQuery)('class', {
-            _id: new mongodb_1.ObjectId('60ee6bd985291054d37fce0d'),
+            cookieHidden: { $exists: false },
         });
         const allClassCase = oldClassList.length;
         let updateProjectResult;

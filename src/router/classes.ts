@@ -10,9 +10,10 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
     console.log('----------------------class sync START------------------------');
     let index = 1;
     const oldClassList: any = await findByQuery('class', {
-      _id: new ObjectId('60ee6bd985291054d37fce0d'),
+      cookieHidden: { $exists: false },
     });
     const allClassCase: number = oldClassList.length;
+
     let updateProjectResult: any;
     async function updateClass(oldClassList: any[]) {
       let updateClassQueries = [];

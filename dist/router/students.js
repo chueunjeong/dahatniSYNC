@@ -23,6 +23,7 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         console.log('----------------------student sync START------------------------');
         const oldStudentList = yield (0, mongoDB_2.findByQuery)('students', {
             timestamp: { $exists: true },
+            //code: 'w6LWgR8JW',
         });
         const oldStudentNum = oldStudentList.length;
         let updateStudentResult;
@@ -96,18 +97,22 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     /*****************************badge************************************** */
                     const studentBadge = yield (0, mongoDB_1.findOne)('badges_student', { code: studentCode });
                     if (studentBadge == null) {
-                        insertStudentBadgeQueries.push({ document: new class_1.StudentBadge(student.classId, student.userId, studentCode) });
+                        insertStudentBadgeQueries.push({
+                            insertOne: { document: new class_1.StudentBadge(student.classId, student.userId, studentCode) },
+                        });
                     }
                     updateStudentQueries.push({
-                        filter: { code: studentCode },
-                        update: {
-                            $set: {
-                                status: studentStatusInfo[0],
-                                iamdoneStatus: studentStatusInfo[1],
-                                cookie: studentCookies,
+                        updateOne: {
+                            filter: { code: studentCode },
+                            update: {
+                                $set: {
+                                    status: studentStatusInfo[0],
+                                    iamdoneStatus: studentStatusInfo[1],
+                                    cookie: studentCookies,
+                                },
+                                $unset: { checked: '' },
+                                $rename: { timestamp: 'created', lastUpdate: 'updated' },
                             },
-                            $unset: { checked: '' },
-                            $rename: { timestamp: 'created', lastUpdate: 'updated' },
                         },
                     });
                     if (index % 100 === 0) {
@@ -115,11 +120,11 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                     }
                     index++;
                 }
-                updateStudentResult = yield (0, mongoDB_1.bulkWrite1000BatchUpdateOne)('students', updateStudentQueries);
+                updateStudentResult = yield (0, mongoDB_1.bulkWrite)('students', updateStudentQueries);
                 console.log('-----------------------------------------student update complete');
                 console.log(updateStudentResult);
                 if (insertStudentBadgeQueries.length !== 0) {
-                    const insertStudentBadgeListResult = yield (0, mongoDB_1.bulkWrite1000BatchInsert)('badges_student', insertStudentBadgeQueries);
+                    const insertStudentBadgeListResult = yield (0, mongoDB_1.bulkWrite)('badges_student', insertStudentBadgeQueries);
                     console.log('-----------------------------------------student badge insert complete');
                     console.log(insertStudentBadgeListResult);
                 }

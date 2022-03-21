@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb';
 import { bulkWrite } from './../database/mongoDB';
 import { decideNewProjectBorderColor, decideNewProjectStatusColor } from './../common/statusDecision';
 import { findByQuery } from '../database/mongoDB';
