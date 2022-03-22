@@ -18,11 +18,12 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------checklist sync START------------------------');
+        console.log('----------------------checklist sync START[3]------------------------');
         let index = 1;
         const oldChecklist = yield (0, mongoDB_1.findByQuery)('checklist', {
             status: { $exists: false },
         });
+        const oldChecklistLength = oldChecklist.length;
         let updateChecklistResult;
         function updateChecklist(oldChecklist) {
             return __awaiter(this, void 0, void 0, function* () {
@@ -50,14 +51,15 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                             },
                         },
                     });
-                    console.log('[', index, '/', oldChecklist.length, ']', checklistId);
+                    if (index % 100 === 0)
+                        console.log('[', index, '/', oldChecklistLength, ']', checklistId);
                     index++;
                 }
                 updateChecklistResult = yield (0, mongoDB_1.bulkWrite)('checklist', updateChecklistQueries);
             });
         }
         yield updateChecklist(oldChecklist);
-        console.log('----------------------checklist sync END------------------------');
+        console.log('----------------------checklist sync END[3]------------------------');
         return res.json(updateChecklistResult);
     }
     catch (e) {

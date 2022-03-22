@@ -20,7 +20,7 @@ const mongoDB_2 = require("../database/mongoDB");
 const router = express_1.default.Router();
 router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------student sync START------------------------');
+        console.log('----------------------student sync START[17]------------------------');
         const oldStudentList = yield (0, mongoDB_2.findByQuery)('students', {
             timestamp: { $exists: true },
             //code: 'w6LWgR8JW',
@@ -131,7 +131,7 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
         }
         yield updateStudent(oldStudentList);
-        console.log('----------------------student sync END------------------------');
+        console.log('----------------------student sync END[17]------------------------');
         return res.json(updateStudentResult);
     }
     catch (e) {

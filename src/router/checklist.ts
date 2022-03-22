@@ -6,11 +6,12 @@ const router = express.Router();
 
 router.put('/sync', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------checklist sync START------------------------');
+    console.log('----------------------checklist sync START[3]------------------------');
     let index = 1;
     const oldChecklist: any = await findByQuery('checklist', {
       status: { $exists: false },
     });
+    const oldChecklistLength: number = oldChecklist.length;
     let updateChecklistResult: any;
     async function updateChecklist(oldChecklist: any[]) {
       let updateChecklistQueries = [];
@@ -36,7 +37,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
             },
           },
         });
-        console.log('[', index, '/', oldChecklist.length, ']', checklistId);
+        if (index % 100 === 0) console.log('[', index, '/', oldChecklistLength, ']', checklistId);
         index++;
       }
 
@@ -44,7 +45,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
     }
 
     await updateChecklist(oldChecklist);
-    console.log('----------------------checklist sync END------------------------');
+    console.log('----------------------checklist sync END[3]------------------------');
     return res.json(updateChecklistResult);
   } catch (e) {
     console.log('[error]', e);

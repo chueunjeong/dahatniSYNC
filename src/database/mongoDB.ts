@@ -250,3 +250,17 @@ export const aggregate = (_collection: string, _find: object[]) =>
         }
       });
   });
+
+export const deleteMany = (_collection: string, _find: object) =>
+  new Promise((resolve, reject) => {
+    client
+      .db(DBNAME)
+      .collection(_collection)
+      .deleteMany(_find, (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else {
+          reject(err);
+        }
+      });
+  });

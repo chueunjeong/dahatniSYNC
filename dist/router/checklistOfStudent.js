@@ -17,13 +17,13 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 router.put('/sync/checked', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------cos sync START------------------------');
+        console.log('----------------------cos sync START[1]------------------------');
         const updateCosSync = yield (0, mongoDB_1.updateMany)('checklistOfStudent', { checked: true }, {
             $set: { hide: false },
             $unset: { checked: '' },
             $rename: { timestamp: 'created', lastUpdate: 'updated' },
         });
-        console.log('----------------------cos sync END------------------------');
+        console.log('----------------------cos sync END[1]------------------------');
         return res.json(updateCosSync);
     }
     catch (e) {
@@ -33,13 +33,13 @@ router.put('/sync/checked', (req, res) => __awaiter(void 0, void 0, void 0, func
 }));
 router.put('/sync/unchecked', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------cos sync START------------------------');
+        console.log('----------------------cos sync START[2]------------------------');
         const updateCosSync = yield (0, mongoDB_1.updateMany)('checklistOfStudent', { checked: false }, {
             $set: { hide: true },
             $unset: { checked: '' },
             $rename: { timestamp: 'created', lastUpdate: 'updated' },
         });
-        console.log('----------------------cos sync END------------------------');
+        console.log('----------------------cos sync END[2]------------------------');
         return res.json(updateCosSync);
     }
     catch (e) {

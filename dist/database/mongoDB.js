@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.aggregate = exports.insertOne2 = exports.insertOne = exports.insertMany = exports.updateMany = exports.updateOne = exports.findBySkip = exports.findByLimit = exports.findBySort = exports.findByQuery = exports.findOne = exports.bulkWrite1000BatchInsert = exports.bulkWrite1000BatchUpdateOne = exports.bulkWrite = exports.findOneAndUpdate = exports.client = void 0;
+exports.deleteMany = exports.aggregate = exports.insertOne2 = exports.insertOne = exports.insertMany = exports.updateMany = exports.updateOne = exports.findBySkip = exports.findByLimit = exports.findBySort = exports.findByQuery = exports.findOne = exports.bulkWrite1000BatchInsert = exports.bulkWrite1000BatchUpdateOne = exports.bulkWrite = exports.findOneAndUpdate = exports.client = void 0;
 const mongodb_1 = require("mongodb");
 const MONGOID = 'admin';
 const MONGOPASSWORD = '2dkdkanfek554kgsgnyyylakekjaa331245jdannde';
@@ -245,4 +245,18 @@ const aggregate = (_collection, _find) => new Promise((resolve, reject) => {
     });
 });
 exports.aggregate = aggregate;
+const deleteMany = (_collection, _find) => new Promise((resolve, reject) => {
+    exports.client
+        .db(DBNAME)
+        .collection(_collection)
+        .deleteMany(_find, (err, result) => {
+        if (!err) {
+            resolve(result);
+        }
+        else {
+            reject(err);
+        }
+    });
+});
+exports.deleteMany = deleteMany;
 //# sourceMappingURL=mongoDB.js.map

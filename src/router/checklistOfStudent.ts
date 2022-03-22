@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.put('/sync/checked', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------cos sync START------------------------');
+    console.log('----------------------cos sync START[1]------------------------');
     const updateCosSync: any = await updateMany(
       'checklistOfStudent',
       { checked: true },
@@ -15,7 +15,7 @@ router.put('/sync/checked', async (req: express.Request, res: express.Response) 
         $rename: { timestamp: 'created', lastUpdate: 'updated' },
       },
     );
-    console.log('----------------------cos sync END------------------------');
+    console.log('----------------------cos sync END[1]------------------------');
     return res.json(updateCosSync);
   } catch (e) {
     console.log('[error]', e);
@@ -25,7 +25,7 @@ router.put('/sync/checked', async (req: express.Request, res: express.Response) 
 
 router.put('/sync/unchecked', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------cos sync START------------------------');
+    console.log('----------------------cos sync START[2]------------------------');
     const updateCosSync: any = await updateMany(
       'checklistOfStudent',
       { checked: false },
@@ -35,7 +35,7 @@ router.put('/sync/unchecked', async (req: express.Request, res: express.Response
         $rename: { timestamp: 'created', lastUpdate: 'updated' },
       },
     );
-    console.log('----------------------cos sync END------------------------');
+    console.log('----------------------cos sync END[2]------------------------');
     return res.json(updateCosSync);
   } catch (e) {
     console.log('[error]', e);

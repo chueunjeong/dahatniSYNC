@@ -20,7 +20,7 @@ const mongoDB_1 = require("../database/mongoDB");
 const router = express_1.default.Router();
 router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------class sync START------------------------');
+        console.log('----------------------class sync START[18]------------------------');
         let index = 1;
         const oldClassList = yield (0, mongoDB_1.findByQuery)('class', {
             cookieHidden: { $exists: false },
@@ -76,7 +76,7 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
             });
         }
         yield updateClass(oldClassList);
-        console.log('----------------------class sync END------------------------');
+        console.log('----------------------class sync END[18]------------------------');
         return res.json(updateProjectResult);
     }
     catch (e) {
@@ -86,7 +86,7 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
 }));
 router.put('/sync/true', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------class sync START------------------------');
+        console.log('----------------------class sync START[19]------------------------');
         let index = 1;
         const oldClassList = yield (0, mongoDB_1.findByQuery)('class', {
             cookieHidden: 'true',
@@ -138,7 +138,7 @@ router.put('/sync/true', (req, res) => __awaiter(void 0, void 0, void 0, functio
             });
         }
         yield updateClass(oldClassList);
-        console.log('----------------------class sync END------------------------');
+        console.log('----------------------class sync END[19]------------------------');
         return res.json(updateProjectResult);
     }
     catch (e) {
@@ -148,7 +148,7 @@ router.put('/sync/true', (req, res) => __awaiter(void 0, void 0, void 0, functio
 }));
 router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------class sync START------------------------');
+        console.log('----------------------class sync START[20]------------------------');
         let index = 1;
         const oldClassList = yield (0, mongoDB_1.findByQuery)('class', {
             cookieHidden: 'false',
@@ -200,7 +200,7 @@ router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, functi
             });
         }
         yield updateClass(oldClassList);
-        console.log('----------------------class sync END------------------------');
+        console.log('----------------------class sync END[20]------------------------');
         return res.json(updateProjectResult);
     }
     catch (e) {

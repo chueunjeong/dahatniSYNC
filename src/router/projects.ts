@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.put('/sync/null', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------project sync START------------------------');
+    console.log('----------------------project sync START[13]------------------------');
     let index = 1;
     const oldProjectList: any = await findByQuery('projects', {
       repeat: { $exists: false },
@@ -60,7 +60,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
       const updatePosListResult = await bulkWrite('projectOfStudent', updatePosListQueries);
     }
     await updateNullProject(oldProjectList);
-    console.log('----------------------project sync END------------------------');
+    console.log('----------------------project sync END[13]------------------------');
     return res.json(updateProjectResult);
   } catch (e) {
     console.log('[error]', e);
@@ -70,7 +70,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
 
 router.put('/sync/false', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------project sync START------------------------');
+    console.log('----------------------project sync START[14]------------------------');
     let index = 1;
     const oldProjectList: any = await findByQuery('projects', {
       repeat: false,
@@ -122,7 +122,7 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
     }
 
     await updateFalseProject(oldProjectList);
-    console.log('----------------------project sync END------------------------');
+    console.log('----------------------project sync END[14]------------------------');
     return res.json(updateProjectResult);
   } catch (e) {
     console.log('[error]', e);
@@ -132,7 +132,7 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
 
 router.put('/sync/count', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------project sync START------------------------');
+    console.log('----------------------project sync START[15]------------------------');
     let index = 1;
     const oldProjectList: any = await findByQuery('projects', {
       repeat: true,
@@ -188,7 +188,7 @@ router.put('/sync/count', async (req: express.Request, res: express.Response) =>
     }
 
     await updateCountProject(oldProjectList);
-    console.log('----------------------project sync END------------------------');
+    console.log('----------------------project sync END[15]------------------------');
     return res.json(updateProjectResult);
   } catch (e) {
     console.log('[error]', e);
@@ -198,7 +198,7 @@ router.put('/sync/count', async (req: express.Request, res: express.Response) =>
 
 router.put('/sync/date', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------project sync START------------------------');
+    console.log('----------------------project sync START[16]------------------------');
     let index = 1;
     const oldProjectList: any = await findByQuery('projects', {
       repeat: true,
@@ -251,7 +251,7 @@ router.put('/sync/date', async (req: express.Request, res: express.Response) => 
       const updatePosListResult = await bulkWrite('projectOfStudent', updatePosListQueries);
     }
     await updateDateProject(oldProjectList);
-    console.log('----------------------project sync END------------------------');
+    console.log('----------------------project sync END[16]------------------------');
     return res.json(updateProjectResult);
   } catch (e) {
     console.log('[error]', e);

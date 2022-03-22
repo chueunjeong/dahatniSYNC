@@ -20,7 +20,7 @@ const router = express_1.default.Router();
 //repeat이 아예 없는 경우
 router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------pos sync START------------------------');
+        console.log('----------------------pos sync START[8]------------------------');
         const updatePosSync = yield (0, mongoDB_2.updateMany)('projectOfStudent', { repeat: { $exists: false } }, {
             $set: {
                 repeat: false,
@@ -31,7 +31,7 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
             $unset: { read: '' },
             $rename: { timestamp: 'created', lastUpdate: 'updated' },
         });
-        console.log('----------------------pos sync END------------------------');
+        console.log('----------------------pos sync END[8]------------------------');
         return res.json(updatePosSync);
     }
     catch (e) {
@@ -41,11 +41,11 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
 }));
 router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------pos sync START------------------------');
+        console.log('----------------------pos sync START[9]------------------------');
         const updatePosSync = yield (0, mongoDB_2.updateMany)('projectOfStudent', { repeat: false }, {
             $rename: { timestamp: 'created', lastUpdate: 'updated' },
         });
-        console.log('----------------------pos sync END------------------------');
+        console.log('----------------------pos sync END[9]------------------------');
         return res.json(updatePosSync);
     }
     catch (e) {
@@ -55,7 +55,7 @@ router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, functi
 }));
 router.put('/sync/count', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------pos sync START------------------------');
+        console.log('----------------------pos sync START[10]------------------------');
         let index = 1;
         const allCountPos = yield (0, mongoDB_1.findByQuery)('projectOfStudent', {
             repeat: true,
@@ -86,7 +86,7 @@ router.put('/sync/count', (req, res) => __awaiter(void 0, void 0, void 0, functi
             });
         }
         yield updateCountPos(allCountPos);
-        console.log('----------------------pos sync END------------------------');
+        console.log('----------------------pos sync END[10]------------------------');
         return res.json(updatePosResult);
     }
     catch (e) {
@@ -96,7 +96,7 @@ router.put('/sync/count', (req, res) => __awaiter(void 0, void 0, void 0, functi
 }));
 router.put('/sync/date', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------pos sync START------------------------');
+        console.log('----------------------pos sync START[11]------------------------');
         let index = 1;
         const allDatePos = yield (0, mongoDB_1.findByQuery)('projectOfStudent', {
             repeat: true,
@@ -127,8 +127,38 @@ router.put('/sync/date', (req, res) => __awaiter(void 0, void 0, void 0, functio
             });
         }
         yield updateDatePos(allDatePos);
-        console.log('----------------------pos sync END------------------------');
+        console.log('----------------------pos sync END[11]------------------------');
         return res.json(updatePosResult);
+    }
+    catch (e) {
+        console.log('[error]', e);
+        res.json(false);
+    }
+}));
+router.put('/sync/reject', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log('----------------------pos sync START[12]------------------------');
+        const updateRejectPosResult = yield (0, mongoDB_2.updateMany)('projectOfStudent', {
+            state: 'reject',
+        }, [
+            {
+                $set: {
+                    reject: {
+                        $switch: {
+                            branches: [
+                                { case: { $eq: ['$reject', ''] }, then: '_' },
+                                { case: { $ne: ['$reject', ''] }, then: '$reject' },
+                            ],
+                            default: '_',
+                        },
+                    },
+                    state: '',
+                    updated: +new Date(),
+                },
+            },
+        ]);
+        console.log('----------------------pos sync END[12]------------------------');
+        return res.json(updateRejectPosResult);
     }
     catch (e) {
         console.log('[error]', e);

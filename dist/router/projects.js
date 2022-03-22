@@ -19,7 +19,7 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------project sync START------------------------');
+        console.log('----------------------project sync START[13]------------------------');
         let index = 1;
         const oldProjectList = yield (0, mongoDB_2.findByQuery)('projects', {
             repeat: { $exists: false },
@@ -72,7 +72,7 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
             });
         }
         yield updateNullProject(oldProjectList);
-        console.log('----------------------project sync END------------------------');
+        console.log('----------------------project sync END[13]------------------------');
         return res.json(updateProjectResult);
     }
     catch (e) {
@@ -82,7 +82,7 @@ router.put('/sync/null', (req, res) => __awaiter(void 0, void 0, void 0, functio
 }));
 router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------project sync START------------------------');
+        console.log('----------------------project sync START[14]------------------------');
         let index = 1;
         const oldProjectList = yield (0, mongoDB_2.findByQuery)('projects', {
             repeat: false,
@@ -133,7 +133,7 @@ router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, functi
             });
         }
         yield updateFalseProject(oldProjectList);
-        console.log('----------------------project sync END------------------------');
+        console.log('----------------------project sync END[14]------------------------');
         return res.json(updateProjectResult);
     }
     catch (e) {
@@ -143,7 +143,7 @@ router.put('/sync/false', (req, res) => __awaiter(void 0, void 0, void 0, functi
 }));
 router.put('/sync/count', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------project sync START------------------------');
+        console.log('----------------------project sync START[15]------------------------');
         let index = 1;
         const oldProjectList = yield (0, mongoDB_2.findByQuery)('projects', {
             repeat: true,
@@ -195,7 +195,7 @@ router.put('/sync/count', (req, res) => __awaiter(void 0, void 0, void 0, functi
             });
         }
         yield updateCountProject(oldProjectList);
-        console.log('----------------------project sync END------------------------');
+        console.log('----------------------project sync END[15]------------------------');
         return res.json(updateProjectResult);
     }
     catch (e) {
@@ -205,7 +205,7 @@ router.put('/sync/count', (req, res) => __awaiter(void 0, void 0, void 0, functi
 }));
 router.put('/sync/date', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------project sync START------------------------');
+        console.log('----------------------project sync START[16]------------------------');
         let index = 1;
         const oldProjectList = yield (0, mongoDB_2.findByQuery)('projects', {
             repeat: true,
@@ -257,7 +257,7 @@ router.put('/sync/date', (req, res) => __awaiter(void 0, void 0, void 0, functio
             });
         }
         yield updateDateProject(oldProjectList);
-        console.log('----------------------project sync END------------------------');
+        console.log('----------------------project sync END[16]------------------------');
         return res.json(updateProjectResult);
     }
     catch (e) {

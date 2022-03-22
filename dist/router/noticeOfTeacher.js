@@ -18,7 +18,7 @@ const mongoDB_1 = require("../database/mongoDB");
 const router = express_1.default.Router();
 router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('----------------------not sync START------------------------');
+        console.log('----------------------not sync START[7]------------------------');
         let index = 1;
         const oldNotList = yield (0, mongoDB_1.findByQuery)('noticeOfTeachers', {
             status: { $exists: false },
@@ -58,7 +58,7 @@ router.put('/sync', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             });
         }
         yield updateNot(oldNotList);
-        console.log('----------------------not sync END------------------------');
+        console.log('----------------------not sync END[7]------------------------');
         return res.json(updateNotResult);
     }
     catch (e) {

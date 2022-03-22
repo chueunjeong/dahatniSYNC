@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.put('/sync', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------not sync START------------------------');
+    console.log('----------------------not sync START[7]------------------------');
     let index = 1;
     const oldNotList: any = await findByQuery('noticeOfTeachers', {
       status: { $exists: false },
@@ -45,7 +45,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
     }
 
     await updateNot(oldNotList);
-    console.log('----------------------not sync END------------------------');
+    console.log('----------------------not sync END[7]------------------------');
     return res.json(updateNotResult);
   } catch (e) {
     console.log('[error]', e);

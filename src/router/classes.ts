@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.put('/sync/null', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------class sync START------------------------');
+    console.log('----------------------class sync START[18]------------------------');
     let index = 1;
     const oldClassList: any = await findByQuery('class', {
       cookieHidden: { $exists: false },
@@ -67,7 +67,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
     }
     await updateClass(oldClassList);
 
-    console.log('----------------------class sync END------------------------');
+    console.log('----------------------class sync END[18]------------------------');
     return res.json(updateProjectResult);
   } catch (e) {
     console.log('[error]', e);
@@ -77,7 +77,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
 
 router.put('/sync/true', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------class sync START------------------------');
+    console.log('----------------------class sync START[19]------------------------');
     let index = 1;
     const oldClassList: any = await findByQuery('class', {
       cookieHidden: 'true',
@@ -132,7 +132,7 @@ router.put('/sync/true', async (req: express.Request, res: express.Response) => 
     }
     await updateClass(oldClassList);
 
-    console.log('----------------------class sync END------------------------');
+    console.log('----------------------class sync END[19]------------------------');
     return res.json(updateProjectResult);
   } catch (e) {
     console.log('[error]', e);
@@ -142,7 +142,7 @@ router.put('/sync/true', async (req: express.Request, res: express.Response) => 
 
 router.put('/sync/false', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------class sync START------------------------');
+    console.log('----------------------class sync START[20]------------------------');
     let index = 1;
     const oldClassList: any = await findByQuery('class', {
       cookieHidden: 'false',
@@ -197,7 +197,7 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
     }
     await updateClass(oldClassList);
 
-    console.log('----------------------class sync END------------------------');
+    console.log('----------------------class sync END[20]------------------------');
     return res.json(updateProjectResult);
   } catch (e) {
     console.log('[error]', e);

@@ -10,7 +10,7 @@ const router = express.Router();
 //repeat이 아예 없는 경우
 router.put('/sync/null', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------pos sync START------------------------');
+    console.log('----------------------pos sync START[8]------------------------');
     const updatePosSync: any = await updateMany(
       'projectOfStudent',
       { repeat: { $exists: false } },
@@ -25,7 +25,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
         $rename: { timestamp: 'created', lastUpdate: 'updated' },
       },
     );
-    console.log('----------------------pos sync END------------------------');
+    console.log('----------------------pos sync END[8]------------------------');
     return res.json(updatePosSync);
   } catch (e) {
     console.log('[error]', e);
@@ -35,7 +35,7 @@ router.put('/sync/null', async (req: express.Request, res: express.Response) => 
 
 router.put('/sync/false', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------pos sync START------------------------');
+    console.log('----------------------pos sync START[9]------------------------');
     const updatePosSync: any = await updateMany(
       'projectOfStudent',
       { repeat: false },
@@ -43,7 +43,7 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
         $rename: { timestamp: 'created', lastUpdate: 'updated' },
       },
     );
-    console.log('----------------------pos sync END------------------------');
+    console.log('----------------------pos sync END[9]------------------------');
     return res.json(updatePosSync);
   } catch (e) {
     console.log('[error]', e);
@@ -53,7 +53,7 @@ router.put('/sync/false', async (req: express.Request, res: express.Response) =>
 
 router.put('/sync/count', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------pos sync START------------------------');
+    console.log('----------------------pos sync START[10]------------------------');
     let index = 1;
     const allCountPos: any = await findByQuery('projectOfStudent', {
       repeat: true,
@@ -86,7 +86,7 @@ router.put('/sync/count', async (req: express.Request, res: express.Response) =>
       updatePosResult = await bulkWrite('projectOfStudent', updatePosQueries);
     }
     await updateCountPos(allCountPos);
-    console.log('----------------------pos sync END------------------------');
+    console.log('----------------------pos sync END[10]------------------------');
     return res.json(updatePosResult);
   } catch (e) {
     console.log('[error]', e);
@@ -96,7 +96,7 @@ router.put('/sync/count', async (req: express.Request, res: express.Response) =>
 
 router.put('/sync/date', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------pos sync START------------------------');
+    console.log('----------------------pos sync START[11]------------------------');
     let index = 1;
     const allDatePos: any = await findByQuery('projectOfStudent', {
       repeat: true,
@@ -130,8 +130,43 @@ router.put('/sync/date', async (req: express.Request, res: express.Response) => 
       updatePosResult = await bulkWrite('projectOfStudent', updatePosQueries);
     }
     await updateDatePos(allDatePos);
-    console.log('----------------------pos sync END------------------------');
+    console.log('----------------------pos sync END[11]------------------------');
     return res.json(updatePosResult);
+  } catch (e) {
+    console.log('[error]', e);
+    res.json(false);
+  }
+});
+
+router.put('/sync/reject', async (req: express.Request, res: express.Response) => {
+  try {
+    console.log('----------------------pos sync START[12]------------------------');
+    const updateRejectPosResult: any = await updateMany(
+      'projectOfStudent',
+      {
+        state: 'reject',
+      },
+      [
+        {
+          $set: {
+            reject: {
+              $switch: {
+                branches: [
+                  { case: { $eq: ['$reject', ''] }, then: '_' },
+                  { case: { $ne: ['$reject', ''] }, then: '$reject' },
+                ],
+                default: '_',
+              },
+            },
+            state: '',
+            updated: +new Date(),
+          },
+        },
+      ],
+    );
+
+    console.log('----------------------pos sync END[12]------------------------');
+    return res.json(updateRejectPosResult);
   } catch (e) {
     console.log('[error]', e);
     res.json(false);

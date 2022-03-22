@@ -14,7 +14,7 @@ import { aggregate, findByQuery } from '../database/mongoDB';
 const router = express.Router();
 router.put('/sync', async (req: express.Request, res: express.Response) => {
   try {
-    console.log('----------------------student sync START------------------------');
+    console.log('----------------------student sync START[17]------------------------');
     const oldStudentList: any = await findByQuery('students', {
       timestamp: { $exists: true },
       //code: 'w6LWgR8JW',
@@ -126,7 +126,7 @@ router.put('/sync', async (req: express.Request, res: express.Response) => {
     }
 
     await updateStudent(oldStudentList);
-    console.log('----------------------student sync END------------------------');
+    console.log('----------------------student sync END[17]------------------------');
     return res.json(updateStudentResult);
   } catch (e) {
     console.log('[error]', e);
