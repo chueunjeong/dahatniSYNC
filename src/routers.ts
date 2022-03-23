@@ -1,5 +1,6 @@
 import express from 'express';
 import http from 'http';
+import badges_student from './router/badges_student';
 import checklist from './router/checklist';
 
 //라우터 가져오기
@@ -24,12 +25,14 @@ const Restful = (PORT: number): void => {
   app.use('/pos', projectOfStudent); //[학생에게 발급한 과제(숙제)]와 관련된 라우터
   app.use('/projects', projects); //[과제]와 관련된 라우터
   app.use('/students', students); //[학생]과 관련된 라우터
+  app.use('/sb', badges_student); //[학생]과 관련된 라우터
   app.use('/classes', classes); //[학급]과 관련된 라우터
 
   server.listen(PORT, () => {
     console.log(`Restful Server Running on ${PORT} port. `);
     console.log('----------------------------------------------------------');
     console.log(`Time: ${new Date().toString()}`);
+    console.time('TOTAL_ELAPSED_TIME');
     console.log('----------------------------------------------------------');
   });
 };

@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
+const badges_student_1 = __importDefault(require("./router/badges_student"));
 const checklist_1 = __importDefault(require("./router/checklist"));
 //라우터 가져오기
 const checklistOfStudent_1 = __importDefault(require("./router/checklistOfStudent"));
@@ -25,11 +26,13 @@ const Restful = (PORT) => {
     app.use('/pos', projectOfStudent_1.default); //[학생에게 발급한 과제(숙제)]와 관련된 라우터
     app.use('/projects', projects_1.default); //[과제]와 관련된 라우터
     app.use('/students', students_1.default); //[학생]과 관련된 라우터
+    app.use('/sb', badges_student_1.default); //[학생]과 관련된 라우터
     app.use('/classes', classes_1.default); //[학급]과 관련된 라우터
     server.listen(PORT, () => {
         console.log(`Restful Server Running on ${PORT} port. `);
         console.log('----------------------------------------------------------');
         console.log(`Time: ${new Date().toString()}`);
+        console.time('TOTAL_ELAPSED_TIME');
         console.log('----------------------------------------------------------');
     });
 };
