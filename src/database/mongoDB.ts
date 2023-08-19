@@ -1,11 +1,11 @@
 import { MongoClient } from 'mongodb';
+import {MY_DBNAME, MY_URL} from './setting';
 
 const MONGOID: any = 'admin';
 const MONGOPASSWORD: any = '2dkdkanfek554kgsgnyyylakekjaa331245jdannde';
 
-const DBNAME = 'dahatnitest';
-const url = `mongodb://${MONGOID}:${MONGOPASSWORD}@3.36.124.15:27017`;
-// const url = `mongodb://${MONGOID}:${MONGOPASSWORD}@3.39.10.60:27017`;
+const DBNAME = MY_DBNAME;
+const url = MY_URL;
 
 export const client = new MongoClient(url);
 
